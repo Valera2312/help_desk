@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+
+<header th:include="blocks/header :: header(${user},${allExecutors})">  </header>
+
+    <body>
+
+                    <table class="table table-striped" style="float: left;display: block;width: auto">
+                        <thead>
+                        <tr>
+                            <th scope="col"></th>
+                            <th scope="col">ID</th>
+                            <th scope="col">Имя</th>
+                            <th scope="col">Отдел</th>
+                            <th scope="col">Категория</th>
+                            <th scope="col">Пользователь</th>
+                            <th scope="col">Статус</th>
+                            <th scope="col">Приоритет</th>
+                            <th scope="col">Ремонтная бригада</th>
+                            <th scope="col">Диспетчер</th>
+                            <th scope="col">Инициатор</th>
+                            <th scope="col">Дата заявки</th>
+                            <th scope="col">Крайний срок</th>
+                        </tr>
+                        </thead>
+                        <th:block if="${role == 'DISPATCHER' OR 'ADMIN'}" th:each="request: ${requests}">
+
+                                <tr class="requests_string" >
+                                    <td><input type="checkbox" class="input_req" th:id="${request.id}" onchange="checkbox(this.id)"></td>
+
+                                        <td th:text="${request.id}" th:onclick="'javascript:openDetail(' + ${request.id} + ')'"></td>
+                                        <td th:text="${request.getName()}" th:onclick="'javascript:openDetail(' + ${request.id} + ')'"></td>
+                                        <td th:text="${request.getDepartmentByDepartament().getName()}" th:onclick="'javascript:openDetail(' + ${request.id} + ')'"></td>
+                                        <td th:text="${request.getRequestCaregoryByCategoryId().getName()}" th:onclick="'javascript:openDetail(' + ${request.id} + ')'" ></td>
+                                        <td th:text="${request.getUser().getUsername()}" th:onclick="'javascript:openDetail(' + ${request.id} + ')'"></td>
+                                        <td th:text="${request.getStatus()}" th:onclick="'javascript:openDetail(' + ${request.id} + ')'"></td>
+                                        <td th:text="${request.getPriority()}" th:onclick="'javascript:openDetail(' + ${request.id} + ')'"></td>
+
+                                        <td>
+                                        <th:block th:each="team : ${request.getRepairTeamsById()}">
+                                            <div>
+                                                <div style="display: block; float: left"  th:text="${team.getExecutorByIdExecutors().getFio()}"></div>
+                                            </div>
+                                        </th:block>
+                                        </td>
+                                        <td th:text="${request.getDispatcherByDispatcherId().getFio()}" th:onclick="'javascript:openDetail(' + ${request.id} + ')'"></td>
+                                        <td th:text="${request.getInitiator()}" th:onclick="'javascript:openDetail(' + ${request.id} + ')'"></td>
+                                        <td th:text="${request.StringdateOfRequest}" th:onclick="'javascript:openDetail(' + ${request.id} + ')'"></td>
+                                        <td th:text="${request.getDeadline()}" th:onclick="'javascript:openDetail(' + ${request.id} + ')'"></td>
+
+                                </tr>
+                       </th:block>
+
+                    </table>
+
+                <table sec:authorize="hasAuthority('USER')" class="table table-striped" style="float: left;display: block;width: auto">
+                    <thead>
+                    <tr>
+                        <th scope="col"></th>
+                        <th scope="col">ID</th>
+                        <th scope="col">Статус</th>
+                        <th scope="col">Отдел</th>
+                        <th scope="col">Приоритет</th>
+
+                    </tr>
+                    </thead>
+
+                    <th:block th:each="request_byUser: ${RequestsByUser}">
+
+                        <tr class="requests_string" >
+                            <td><input type="checkbox" class="input_req" th:id="${request_byUser.getId()}" onchange="checkbox(this.id)"></td>
+                            <td th:text="${request_byUser.getId()}"></td>
+                            <td th:text="${request_byUser.getStatus()}"></td>
+                            <td th:text="${request_byUser.getDepartmentByDepartament().getName()}"></td>
+                            <td th:text="${request_byUser.getPriority()}"></td>
+                    </th:block>
+                </table>
+
+           <div sec:authorize="hasAuthority('ADMIN')"></div>
+
+<!--<h1 th:text="${role}"></h1> -->
+
+                    <div class="b-popup" id="popupAddExecutor">
+                        <div class="b-popup-content">
+                            <button onclick="(popupAddExecutorHide())"><img class = "close" src ="https://i.stack.imgur.com/cLnMQ.png"></button>
+                            <h1>
+                                Назначить исполнителя
+                            </h1>
+
+                            <form id="addExecutor" action="addExecutor/" method = post>
+                                <th:block  th:each="e: ${allExecutors}">
+
+                                    <label th:for="${e.getId()}" th:text="${e.getFio()}"></label>
+                                    <input type="checkbox" th:id="${e.getId()}" th:name="CheckExec + ${e.getId()}"  th:value="${e.getId()}" >
+
+                                </th:block>
+
+
+                                <button type="submit" class="btn btn-success">Назначить</button>
+
+                            </form>
+                        </div>
+                    </div>
+    </body>
+</html>

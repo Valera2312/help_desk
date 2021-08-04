@@ -1,0 +1,123 @@
+<html xmlns:sec="http://www.w3.org/1999/xhtml">
+<th:block xmlns:th ="http://www.thymeleaf.org" th:fragment = "header (user,allExecutors)">
+    <head>
+        <title>Help Desk</title>
+        <meta charset="UTF-8">
+        <link href="/main/style.css" type="text/css" rel="stylesheet">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+        <script src="/header/popUp.js"></script>
+        <script src="/header/scripts.js"></script>
+        <script src="/header/checkbox.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="/header/style.css">
+
+    </head>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#"> <img src="/login/images/sibintek.png" width="30" height="30" alt=""></a>
+
+            <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+                    <li class="nav-item">
+                        <button onclick = PopUpShow(); type="button" class="btn btn-outline-success ml-4"> + Новая заявка</button>
+                    </li>
+
+                    <li>
+                     <!--   <button type="button" class="p-0 btn btn-outline-success ml-4"> <a id="about_request" href="/detail/"> Подробно о заявке </a> </button> -->
+                    </li>
+                    <li class="nav-item">
+                        <div class="dropdown">
+                            <button class="btn btn-primary dropdown-toggle ml-4" type="button" data-toggle="dropdown"> Действия
+                                <span class="caret"></span></button>
+                            <ul class="dropdown-menu">
+                                <li sec:authorize="hasAuthority('ADMIN')" ><a id = "delete" href="#">Удалить</a></li>
+                                <li sec:authorize="hasAuthority('USER')" ><a id = "close" href="#">Закрыть</a></li>
+                                <li sec:authorize="hasAuthority('USER')"><a id = "add_comment" href="#">Добавить комментарий</a></li>
+
+                                <li sec:authorize="hasAuthority('DISPATCHER')" onclick="popupAddExecutorShow()"><a id = "add_executor" href="#">Назначить исполнителя</a></li>
+                                <li sec:authorize="hasAuthority('DISPATCHER')" onclick="popupAddPriorityShow()"><a  href="#">Назначить приоритет</a></li>
+                                <li sec:authorize="hasAuthority('DISPATCHER')" onclick=""><a  href="#">Класифицаровать заявку</a></li>
+
+                                <li sec:authorize="hasAuthority('EXECUTOR')" onclick="popupAddPriorityShow()"><a  href="#">Изменить статус</a></li>
+                                <li sec:authorize="hasAuthority('EXECUTOR')" onclick="popupAddPriorityShow()"><a  href="#">Добавить комментарий</a></li>
+
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <span class="navbar-text " th:text="${user}"></span>
+
+            <a href="/login?logout"><img width="30" height="30" src="/login/images/—Pngtree—exit button_3550270.png"  alt="Кнопка «button»"> </a>
+
+        </div>
+    </nav>
+
+    <div class="b-popup" id="popupAddPriority">
+        <div class="b-popup-content">
+            <button onclick="(popupAddPriorityHide())"><img class = "close" src ="https://i.stack.imgur.com/cLnMQ.png"></button>
+            <h1>
+                Назначить приоритет
+            </h1>
+            <form id="changePriority" action="changePriority/" method = get>
+
+                <datalist id="priorities">
+                    <option value="Низкий"> Низкий </option>
+                    <option value="Средний"> Средний </option>
+                    <option value="Высокий"> Высокий </option>
+                </datalist>
+                <input type="text" name="priority" class="form-control" placeholder="Приоритет" list="priorities">
+                <button type="submit" class="btn btn-success">Назначить</button>
+
+            </form>
+        </div>
+    </div>
+
+
+
+    <div class="b-popup" id="popup1">
+        <div class="b-popup-content">
+            <button onclick="PopUpHide()"><img class = "close" src ="https://i.stack.imgur.com/cLnMQ.png"></button>
+            <h1>
+                Новая заявка
+            </h1>
+            <form th:action="@{/request/add}" enctype="multipart/form-data" method = post>
+
+                <input type="text" name="name" class="form-control mb-4" placeholder="Имя">
+
+                <input type="text" name="description" class="form-control mb-4" placeholder="Описание" >
+
+                <input type="text" name="initiator" class="form-control mb-4" placeholder="Инициатор" >
+
+                <label for="deadline">Крайний срок</label>
+                <input type="datetime-local" id="deadline" name="deadline" class="form-control mb-4" >
+
+                <label for="file">Выберите файлы</label>
+
+                <input type="file" id="file" name="files" multiple>
+
+                <input type="hidden" name="user_id" th:value="${user}">
+
+                <button type="submit" class="btn btn-success">Добавить</button>
+            </form>
+        </div>
+    </div>
+
+
+    <nav class="nav flex-column" style = "float:left;display: block;width: 160px">
+        <li class="nav-item">
+            <button class="btn btn-outline-primary mt-3 custom" href="#">Заявки</button>
+        </li>
+        <li sec:authorize="hasAuthority('ADMIN')">
+            <button class="btn btn-outline-primary mt-3 custom" ><a href="/admin/users">Пользователи</a></button>
+        </li>
+
+    </nav>
+
+</th:block>
+
+
