@@ -3,6 +3,17 @@ $(document).ready(function(){
     PopUpHide();
     popupAddPriorityHide();
     popupAddExecutorHide();
+
+    let priorityTd = document.getElementById("priority");
+    if (priorityTd.innerText === "Высокий") {
+
+        priorityTd.style.backgroundColor = "red";
+
+    }else if (priorityTd.innerText === "Средний") {
+        priorityTd.style.backgroundColor = "orange";
+    }else {
+        priorityTd.style.backgroundColor = "yellow";
+    }
 });
 function PopUpShow(){
     $("#popup1").show();

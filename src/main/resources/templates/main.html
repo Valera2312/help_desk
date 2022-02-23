@@ -34,7 +34,7 @@
         <td th:text="${request.getUser().getUsername()}" th:onclick="'javascript:openDetail(' + ${request.id} + ')'"></td>
         <td th:text="${request.getStatus()}" th:onclick="'javascript:openDetail(' + ${request.id} + ')'"></td>
 
-        <td class="priority" th:text="${request.getPriority()}" th:onclick="'javascript:openDetail(' + ${request.id} + ')'"></td>
+        <td id="priority" th:text="${request.getPriority()}" th:onclick="'javascript:openDetail(' + ${request.id} + ')'"></td>
 
         <td>
             <th:block th:each="team : ${request.getRepairTeamsById()}">
@@ -102,55 +102,47 @@
     </div>
 </div>
 
+    <nav style="position: absolute; top: 500px" >
+        <div class = "col-sm-2" th:if = "${totalPages > 1}">
+            Всего заявок: [[${totalItems}]]
+        </div>
 
+        <ul class="pagination justify-content-center">
 
-<nav class="row col-sm-10" >
+            <li class="page-item " th:if="${currentPage > 1}">
+                <a class="page-link"  th:href="@{'/?pageNo=' + ${currentPage - 1}}">Предидущая</a>
+            </li>
 
-    <div class = "col-sm-2" th:if = "${totalPages > 1}">
+            <li class="page-item disabled" th:unless="${currentPage > 1}">
+                <span class="page-link" >Предидущая</span>
+            </li>
 
-        Всего заявок: [[${totalItems}]]
+            <span th:each="i: ${#numbers.sequence(1, totalPages)}">
 
-    </div>
+                <li class="page-item " th:if="${currentPage != i}" >
+                    <a class="page-link"  th:href="@{'/?pageNo=' + ${i}}">[[${i}]]</a>
+                </li>
 
-    <ul class="pagination justify-content-center">
+                 <li class="page-item active " th:unless="${currentPage != i}">
+                     <a class="page-link" href="#" tabindex="-1" aria-disabled="true">[[${i}]]</a>
+                 </li>
+            </span>
 
-        <li class="page-item " th:if="${currentPage > 1}">
-            <a class="page-link"  th:href="@{'/?pageNo=' + ${currentPage - 1}}">Предидущая</a>
-        </li>
+            <li class="page-item " th:if="${currentPage < totalPages}">
+                <a class="page-link" th:href="@{'/?pageNo=' + ${currentPage + 1}}">Следующая</a>
+            </li>
+            <li class="page-item disabled " th:unless="${currentPage < totalPages}">
+                <span class="page-link" >Следующая</span>
+            </li>
 
-        <li class="page-item disabled" th:unless="${currentPage > 1}">
-            <span class="page-link" >Предидущая</span>
-        </li>
-
-        <span th:each="i: ${#numbers.sequence(1, totalPages)}">
-
-                                <li class="page-item " th:if="${currentPage != i}" >
-                                    <a class="page-link"  th:href="@{'/?pageNo=' + ${i}}">[[${i}]]</a>
-                                </li>
-
-                                 <li class="page-item active " th:unless="${currentPage != i}">
-                                     <a class="page-link" href="#" tabindex="-1" aria-disabled="true">[[${i}]]</a>
-                                 </li>
-                            </span>
-
-        <li class="page-item " th:if="${currentPage < totalPages}">
-            <a class="page-link" th:href="@{'/?pageNo=' + ${currentPage + 1}}">Следующая</a>
-        </li>
-        <li class="page-item disabled " th:unless="${currentPage < totalPages}">
-            <span class="page-link" >Следующая</span>
-        </li>
-
-        <li class="page-item" th:if="${currentPage < totalPages}">
-            <a class="page-link" th:href="@{'/?pageNo=' + ${totalPages}}">Последняя</a>
-        </li>
-        <li class="page-item disabled" th:unless="${currentPage < totalPages}">
-            <span class="page-link" >Последняя</span>
-        </li>
-    </ul>
-
-</nav>
-
-
+            <li class="page-item" th:if="${currentPage < totalPages}">
+                <a class="page-link" th:href="@{'/?pageNo=' + ${totalPages}}">Последняя</a>
+            </li>
+            <li class="page-item disabled" th:unless="${currentPage < totalPages}">
+                <span class="page-link" >Последняя</span>
+            </li>
+        </ul>
+    </nav>
 
 </body>
 
