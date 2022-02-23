@@ -28,7 +28,6 @@
 
     <th:block th:each="user: ${Users}">
         <tr>
-
             <td th:text="${user.getUsername()}"></td>
             <td th:text="${user.getPassword()}"></td>
             <td   th:if="${user.getActive() == 0}">No</td>

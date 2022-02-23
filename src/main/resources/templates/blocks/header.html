@@ -16,7 +16,7 @@
 
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#"> <img src="/login/images/sibintek.png" width="30" height="30" alt=""></a>
+            <a class="navbar-brand" href="/"> <img src="/login/images/sibintek.png" width="30" height="30" alt=""></a>
 
             <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
@@ -110,12 +110,11 @@
 
     <nav class="nav flex-column" style = "float:left;display: block;width: 160px">
         <li class="nav-item">
-            <button class="btn btn-outline-primary mt-3 custom" href="#">Заявки</button>
+            <button class="btn btn-outline-primary mt-3 custom"> <a href="/"> Заявки </a></button>
         </li>
         <li sec:authorize="hasAuthority('ROLE_ADMIN')">
             <button class="btn btn-outline-primary mt-3 custom" ><a href="/admin/users">Пользователи</a></button>
         </li>
-
     </nav>
 
 </th:block>

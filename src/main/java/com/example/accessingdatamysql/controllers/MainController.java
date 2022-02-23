@@ -7,8 +7,10 @@ import com.example.accessingdatamysql.repo.ExecutorsRepo;
 import com.example.accessingdatamysql.repo.RepairTeamRepo;
 import com.example.accessingdatamysql.repo.RequestRepo;
 import com.example.accessingdatamysql.repo.UserRepo;
+import com.example.accessingdatamysql.services.RequestsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,8 +24,6 @@ import java.text.ParseException;
 import java.util.*;
 
 @Controller
-
-
 public class MainController {
     @Value("${upload.path}")
     private String uploadPath;
@@ -37,23 +37,62 @@ public class MainController {
     ExecutorsRepo executorsRepo;
     @Autowired
     RepairTeamRepo repairTeamRepo;
+    @Autowired
+    RequestsService requestsService;
+
 
 
     @GetMapping(path = "/")
-    public String main(Model model, Principal principal, Authentication auth) {
+    public String main(Model model,
+                       Principal principal,
+                       Authentication auth,
+                       @RequestParam(value = "pageNo",required = false) Integer pageNo,
+                       @RequestParam(value = "sortField",required = false) String sortField,
+                       @RequestParam(value = "sortDir",required = false) String sortDirection) {
+
+        if(pageNo == null){
+            pageNo = 1;
+        }
+        if(sortField == null){
+            sortField = "id";
+        }
+        if(sortDirection == null){
+            sortDirection = "asc";
+        }
 
         //запросы
-        Iterable<Request> requests = requestRepo.findAll();
-        Users user = userRepo.findByUsername(principal.getName());
-        List<Request> requestsByUsers = requestRepo.findAllByUser_id(user.getId());
-        Iterable<Executor> allExecutors = executorsRepo.findAll();
+        Iterable<Request> requests = this.requestsService.AllRequests(); //requestRepo.findAll();
+        Users user = userRepo.findByUsername(principal.getName()); //need to make service
+        //List<Request> requestsByUsers = requestsService.findAllByUser_id(user.getId());
+
+
+        Iterable<Executor> allExecutors = executorsRepo.findAll();//need to make service
 
         //---------------
 
+        //-----pagination
+        int pageSize = 5;
+
+
+        Page<Request> page = requestsService.findPaginated(pageNo,pageSize, sortField, sortDirection);
+        Page<Request> requestsByUsersPage = requestsService.findPaginatedByUserId(pageNo,pageSize,user.getId(),sortField,sortDirection);
+
+        List<Request> requestList = page.getContent();
+        List<Request> requestsByUsers = requestsByUsersPage.getContent();
+
+        model.addAttribute("currentPage",pageNo);
+        model.addAttribute("totalPages",page.getTotalPages());
+        model.addAttribute("totalItems",page.getTotalElements());
+        model.addAttribute("listRequest",requestList);
+
+        model.addAttribute("sortField",sortField);
+        model.addAttribute("sortDirection",sortDirection);
+        model.addAttribute("reverseSortDir",sortDirection.equals("asc") ? "desc" : "asc");
+        //-----
+
         model.addAttribute("RequestsByUser", requestsByUsers);
         model.addAttribute("user", principal.getName());
-        model.addAttribute("role", auth.getAuthorities());
-        model.addAttribute("requests", requests);
+        //model.addAttribute("role", auth.getAuthorities());
         model.addAttribute("allExecutors", allExecutors);
 
         return "main";
@@ -62,12 +101,12 @@ public class MainController {
     @PostMapping(path = "request/add")
 
     public String RequestAdd(Principal principal, @RequestParam MultipartFile[] files,
-                                                  @RequestParam  String name,
-                                                  @RequestParam  String description,
-                                                  @RequestParam  String initiator,
-                                                  @RequestParam  String deadline
+                             @RequestParam  String name,
+                             @RequestParam  String description,
+                             @RequestParam  String initiator,
+                             @RequestParam  String deadline
 
-                                                  ) throws IOException, ParseException {
+    ) throws IOException, ParseException {
 
         //запросы
         Users user = userRepo.findByUsername(principal.getName());
@@ -105,7 +144,7 @@ public class MainController {
     @GetMapping(path = "/changePriority/{id}")
     public String changePriority(HttpServletRequest request, @PathVariable(value = "id") long id) {
         String priority =  request.getParameter("priority");
-        requestRepo.UpdatePriority(priority,id);
+        requestsService.UpdatePriority(priority,id);
         return "redirect:/";
     }
 
@@ -117,20 +156,20 @@ public class MainController {
         model.addAttribute("files",files);
         model.addAttribute("request",request);
         model.addAttribute("user",principal.getName());
-            return "detailsRequest";
+        return "detailsRequest";
     }
 
     @PostMapping(path = "/addExecutor/{id}")
     public String addExecutors(@PathVariable(value = "id") long id,@RequestParam Map<String, String> parameters) {
 
-        
+
         for (Map.Entry<String, String> entry : parameters.entrySet()) {
             RepairTeam repairTeam = new RepairTeam(Integer.parseInt(entry.getValue()),id);
             repairTeamRepo.save(repairTeam);
         }
 
-
         return "redirect:/";
     }
+
 
 }
