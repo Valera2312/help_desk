@@ -33,16 +33,16 @@
                             <button class="btn btn-primary dropdown-toggle ml-4" type="button" data-toggle="dropdown"> Действия
                                 <span class="caret"></span></button>
                             <ul class="dropdown-menu">
-                                <li sec:authorize="hasAuthority('ADMIN')" ><a id = "delete" href="#">Удалить</a></li>
-                                <li sec:authorize="hasAuthority('USER')" ><a id = "close" href="#">Закрыть</a></li>
-                                <li sec:authorize="hasAuthority('USER')"><a id = "add_comment" href="#">Добавить комментарий</a></li>
+                                <li sec:authorize="hasAuthority('ROLE_ADMIN')" ><a id = "delete" href="#">Удалить</a></li>
+                                <li sec:authorize="hasAuthority('ROLE_USER')" ><a id = "close" href="#">Закрыть</a></li>
+                                <li sec:authorize="hasAuthority('ROLE_USER')"><a id = "add_comment" href="#">Добавить комментарий</a></li>
 
-                                <li sec:authorize="hasAuthority('DISPATCHER')" onclick="popupAddExecutorShow()"><a id = "add_executor" href="#">Назначить исполнителя</a></li>
-                                <li sec:authorize="hasAuthority('DISPATCHER')" onclick="popupAddPriorityShow()"><a  href="#">Назначить приоритет</a></li>
-                                <li sec:authorize="hasAuthority('DISPATCHER')" onclick=""><a  href="#">Класифицаровать заявку</a></li>
+                                <li sec:authorize="hasAuthority('ROLE_DISPATCHER')" onclick="popupAddExecutorShow()"><a id = "add_executor" href="#">Назначить исполнителя</a></li>
+                                <li sec:authorize="hasAuthority('ROLE_DISPATCHER')" onclick="popupAddPriorityShow()"><a  href="#">Назначить приоритет</a></li>
+                                <li sec:authorize="hasAuthority('ROLE_DISPATCHER')" onclick=""><a  href="#">Класифицаровать заявку</a></li>
 
-                                <li sec:authorize="hasAuthority('EXECUTOR')" onclick="popupAddPriorityShow()"><a  href="#">Изменить статус</a></li>
-                                <li sec:authorize="hasAuthority('EXECUTOR')" onclick="popupAddPriorityShow()"><a  href="#">Добавить комментарий</a></li>
+                                <li sec:authorize="hasAuthority('ROLE_EXECUTOR')" onclick="popupAddPriorityShow()"><a  href="#">Изменить статус</a></li>
+                                <li sec:authorize="hasAuthority('ROLE_EXECUTOR')" onclick="popupAddPriorityShow()"><a  href="#">Добавить комментарий</a></li>
 
                             </ul>
                         </div>
@@ -112,7 +112,7 @@
         <li class="nav-item">
             <button class="btn btn-outline-primary mt-3 custom" href="#">Заявки</button>
         </li>
-        <li sec:authorize="hasAuthority('ADMIN')">
+        <li sec:authorize="hasAuthority('ROLE_ADMIN')">
             <button class="btn btn-outline-primary mt-3 custom" ><a href="/admin/users">Пользователи</a></button>
         </li>
 

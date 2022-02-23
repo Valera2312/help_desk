@@ -4,21 +4,36 @@
 <header th:include="blocks/header :: header(${user},'1')"></header>
 
 <body>
-<style>
 
+
+<style>
+    #content{
+        margin-top: 100px;
+        float: left;
+        border:thick double #32a1ce;;
+    }
 </style>
 
-    <div class="card mb-3">
-        <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-            <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-        </div>
+<div id="content">
+    <h4>Статус</h4>
+    <p class="priority" th:text="${request.getStatus()}"></p>
+    <h4>Крайний срок</h4>
+    <p class="priority" th:text="${request.getDeadline()}"></p>
+    <h4>Приоритет</h4>
+    <p class="priority" th:text="${request.getPriority()}"></p>
+    <h3>Описание</h3>
+    <p th:text="${request.getDescription()}"></p>
 
-            <th:block  th:each="f: ${files} ">
-                    <img th:src="${'/img/' + f}" class="image" width="400pх" height = "400px">
-            </th:block>
+    <div>
+        <th:block  th:each="f: ${files} ">
+            <img th:src="${'/img/' + f}" class="image" width="400pх" height = "400px">
+        </th:block>
     </div>
 
+
+</div>
+
+
 </body>
+
 </html>

@@ -128,12 +128,12 @@ public class Request {
     @Column(name = "deadline")
     public String getDeadline() {
 
-        return this.deadline.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm" ));
+        return this.deadline.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
 
     }
     public void setDeadline(String deadline) {
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         this.deadline = LocalDateTime.parse(deadline,formatter);
     }
 
