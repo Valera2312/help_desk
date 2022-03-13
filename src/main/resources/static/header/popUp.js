@@ -3,6 +3,8 @@ $(document).ready(function(){
     PopUpHide();
     popupAddPriorityHide();
     popupAddExecutorHide();
+    popupAddStatusHide();
+    popupAddCommentHide();
 
     let priorityTd = document.getElementById("priority");
     if (priorityTd.innerText === "Высокий") {
@@ -11,7 +13,7 @@ $(document).ready(function(){
 
     }else if (priorityTd.innerText === "Средний") {
         priorityTd.style.backgroundColor = "orange";
-    }else {
+    }else if (priorityTd.innerText === "Низкий"){
         priorityTd.style.backgroundColor = "yellow";
     }
 });
@@ -35,4 +37,17 @@ function popupAddExecutorShow(){
 }
 function popupAddExecutorHide(){
     $("#popupAddExecutor").hide();
+}
+
+function popupAddStatusShow(){
+    $("#popupAddStatus").show();
+}
+function popupAddStatusHide(){
+    $("#popupAddStatus").hide();
+}
+function popupAddCommentShow(){
+    $("#popupAddComment").show();
+}
+function popupAddCommentHide(){
+    $("#popupAddComment").hide();
 }

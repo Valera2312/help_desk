@@ -5,7 +5,7 @@
 
 <body>
 
-<table sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_DISPATCHER')"
+<table sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_DISPATCHER','ROLE_EXECUTOR')"
        class="table table-striped" style="float: left;display: block;width: auto">
     <thead>
     <tr>
@@ -22,6 +22,7 @@
         <th scope="col">Инициатор</th>
         <th scope="col">Дата заявки</th>
         <th scope="col">Крайний срок</th>
+        <th scope="col">Комментарии</th>
     </tr>
     </thead>
     <tr class="requests_string" th:each="request: ${listRequest}" >
@@ -47,6 +48,7 @@
         <td th:text="${request.getInitiator()}" th:onclick="'javascript:openDetail(' + ${request.id} + ')'"></td>
         <td th:text="${request.StringdateOfRequest}" th:onclick="'javascript:openDetail(' + ${request.id} + ')'"></td>
         <td th:text="${request.getDeadline()}" th:onclick="'javascript:openDetail(' + ${request.id} + ')'"></td>
+        <td th:text="${request.getComments()}" th:onclick="'javascript:openDetail(' + ${request.id} + ')'"></td>
 
     </tr>
 
@@ -119,13 +121,16 @@
 
             <span th:each="i: ${#numbers.sequence(1, totalPages)}">
 
+
                 <li class="page-item " th:if="${currentPage != i}" >
                     <a class="page-link"  th:href="@{'/?pageNo=' + ${i}}">[[${i}]]</a>
                 </li>
 
-                 <li class="page-item active " th:unless="${currentPage != i}">
+                 <li class="page-item active " th:unless="${currentPage != i }">
                      <a class="page-link" href="#" tabindex="-1" aria-disabled="true">[[${i}]]</a>
                  </li>
+
+
             </span>
 
             <li class="page-item " th:if="${currentPage < totalPages}">

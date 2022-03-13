@@ -35,14 +35,15 @@
                             <ul class="dropdown-menu">
                                 <li sec:authorize="hasAuthority('ROLE_ADMIN')" ><a id = "delete" href="#">Удалить</a></li>
                                 <li sec:authorize="hasAuthority('ROLE_USER')" ><a id = "close" href="#">Закрыть</a></li>
-                                <li sec:authorize="hasAuthority('ROLE_USER')"><a id = "add_comment" href="#">Добавить комментарий</a></li>
+                                <li sec:authorize="hasAnyRole('ROLE_DISPATCHER','ROLE_EXECUTOR','ROLE_USER')" onclick="popupAddCommentShow()"><a id = "add_comment" href="#">Добавить комментарий</a></li>
 
                                 <li sec:authorize="hasAuthority('ROLE_DISPATCHER')" onclick="popupAddExecutorShow()"><a id = "add_executor" href="#">Назначить исполнителя</a></li>
-                                <li sec:authorize="hasAuthority('ROLE_DISPATCHER')" onclick="popupAddPriorityShow()"><a  href="#">Назначить приоритет</a></li>
+                                <li sec:authorize="hasAuthority('ROLE_DISPATCHER')" onclick="popupAddPriorityShow()"><a id = "addPriority" href="#">Назначить приоритет</a></li>
+                                <li sec:authorize="hasAuthority('ROLE_DISPATCHER')" onclick="popupAddStatusShow()"><a id = "add_st" href="#">Назначить статус</a></li>
                                 <li sec:authorize="hasAuthority('ROLE_DISPATCHER')" onclick=""><a  href="#">Класифицаровать заявку</a></li>
 
-                                <li sec:authorize="hasAuthority('ROLE_EXECUTOR')" onclick="popupAddPriorityShow()"><a  href="#">Изменить статус</a></li>
-                                <li sec:authorize="hasAuthority('ROLE_EXECUTOR')" onclick="popupAddPriorityShow()"><a  href="#">Добавить комментарий</a></li>
+                                <li sec:authorize="hasAuthority('ROLE_EXECUTOR')" onclick="popupAddStatusShow()"><a  href="#">Изменить статус</a></li>
+
 
                             </ul>
                         </div>
@@ -77,6 +78,43 @@
         </div>
     </div>
 
+    <div class="b-popup" id="popupAddComment">
+        <div class="b-popup-content">
+            <button onclick="(popupAddCommentHide())"><img class = "close" src ="https://i.stack.imgur.com/cLnMQ.png"></button>
+            <h1>
+                Добавить комментарий
+            </h1>
+            <form id="addComment" action="comment/" method = get>
+
+                <input type="text" name="comment" class="form-control" placeholder="Комментарий" >
+                <button type="submit" class="btn btn-success">Добавить</button>
+
+            </form>
+        </div>
+    </div>
+
+
+
+    <div class="b-popup" id="popupAddStatus">
+        <div class="b-popup-content">
+            <button onclick="(popupAddStatusHide())"><img class = "close" src ="https://i.stack.imgur.com/cLnMQ.png"></button>
+            <h1>
+                Назначить статус
+            </h1>
+            <form id="add_status" action="status/" method = get>
+                <datalist id ="statuses">
+                    <option sec:authorize="hasAuthority('ROLE_DISPATCHER')" value="Назначен исполнитель"> Назначен исполнитель </option>
+                    <option  sec:authorize="hasAuthority('ROLE_DISPATCHER')" value="Закрыта"> Закрыта </option>
+                    <option  sec:authorize="hasAuthority('ROLE_EXECUTOR')" value="На исполнении"> На исполнении </option>
+                    <option  sec:authorize="hasAuthority('ROLE_EXECUTOR')" value="На проверке"> На проверке</option>
+
+                </datalist>
+                <input type="text" name="status" class="form-control" placeholder="Статус" list="statuses">
+                <button type="submit" class="btn btn-success">Назначить</button>
+
+            </form>
+        </div>
+    </div>
 
 
     <div class="b-popup" id="popup1">
@@ -114,6 +152,17 @@
         </li>
         <li sec:authorize="hasAuthority('ROLE_ADMIN')">
             <button class="btn btn-outline-primary mt-3 custom" ><a href="/admin/users">Пользователи</a></button>
+        </li>
+
+        <li>
+            <button class="btn btn-outline-primary mt-3 custom" ><a href="/base">База знаний</a></button>
+        </li>
+
+        <li>
+            <button class="btn btn-outline-primary mt-3 custom" ><a href="/lists">Листы заданий</a></button>
+        </li>
+        <li>
+            <button class="btn btn-outline-primary mt-3 custom" ><a href="/reports">Отчеты</a></button>
         </li>
     </nav>
 

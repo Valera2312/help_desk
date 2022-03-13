@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+</head>
+<body>
+<h1> Листы заданий </h1>
+<h2> Cотрудники </h2>
+
+     <th:block th:each="executor: ${executors}">
+         <div>
+             <a th:href = "@{'/list/'(id=${executor.getId()})}">[[${executor.getFio()}]]</a>
+         </div>
+     </th:block>
+
+</body>
+</html>

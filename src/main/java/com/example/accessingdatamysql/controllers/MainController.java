@@ -81,7 +81,12 @@ public class MainController {
         List<Request> requestsByUsers = requestsByUsersPage.getContent();
 
         model.addAttribute("currentPage",pageNo);
-        model.addAttribute("totalPages",page.getTotalPages());
+
+        int totalPages = page.getTotalPages();
+        if(page.getTotalPages() == 0) {
+            totalPages += 1;
+        }
+        model.addAttribute("totalPages",totalPages);
         model.addAttribute("totalItems",page.getTotalElements());
         model.addAttribute("listRequest",requestList);
 
@@ -147,6 +152,23 @@ public class MainController {
         requestsService.UpdatePriority(priority,id);
         return "redirect:/";
     }
+
+    @GetMapping(path = "/status/{id}")
+    public String changeStatus(HttpServletRequest request, @PathVariable(value = "id") long id) {
+        String status =  request.getParameter("status");
+        requestsService.UpdateStatus(status,id);
+        return "redirect:/";
+    }
+    @GetMapping(path = "/comment/{id}")
+    public String changeComment(HttpServletRequest request, @PathVariable(value = "id") long id) {
+        String comment =  request.getParameter("comment");
+        requestsService.UpdateComment(comment,id);
+        return "redirect:/";
+    }
+
+
+
+
 
     @GetMapping(path = "/detail/{id}")
     public String getDetail(Model model,@PathVariable(value = "id") long id,Principal principal) {

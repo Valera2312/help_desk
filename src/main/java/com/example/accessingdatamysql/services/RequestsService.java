@@ -49,6 +49,12 @@ public class RequestsService {
     public void UpdatePriority(String priority,Long id){
         requestRepo.UpdatePriority(priority,id);
     }
+    public void UpdateStatus(String status,Long id){
+        requestRepo.UpdateStatus(status,id);
+    }
+    public void UpdateComment(String comment,Long id){
+        requestRepo.UpdateComment(comment,id);
+    }
     //public List<Request> findAllByUser_id(int user_id){
        // return requestRepo.findAllByUser_id(user_id);
   //  }

@@ -10,10 +10,11 @@ function checkbox(id) {
         if(document.getElementById('delete') != null){
             document.getElementById('delete').href = "/delete/" + chbox.id;
         }
-
-
+        document.getElementById('add_status').action += chbox.id;
         document.getElementById('changePriority').action += chbox.id;
         document.getElementById('addExecutor').action += chbox.id;
+        document.getElementById('addComment').action += chbox.id;
         document.getElementById('about_request').href += chbox.id;
+
     }
 }

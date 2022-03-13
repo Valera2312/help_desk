@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<th:block th:each="t: ${repairTeams}">
+    <div>
+
+        <h2>Количество заявок:</h2>
+        <h3 th:text="${repairTeams.size()}"> </h3>
+
+    </div>
+</th:block>
+</body>
+</html>

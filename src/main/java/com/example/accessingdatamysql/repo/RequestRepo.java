@@ -25,5 +25,19 @@ public interface RequestRepo extends CrudRepository<Request, Long> {
     void UpdatePriority( @Param("priority") String priority,
                          @Param("id") Long id);
 
+
+    @Transactional
+    @Modifying
+    @Query("update Request r set r.status = :status  where r.id = :id")
+    void UpdateStatus( @Param("status") String status,
+                         @Param("id") Long id);
+
+    @Transactional
+    @Modifying
+    @Query("update Request r set r.comments = :comment  where r.id = :id")
+    void UpdateComment( @Param("comment") String comment,
+                       @Param("id") Long id);
+
+
     Request findById(long id);
 }
